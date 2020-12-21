@@ -7,6 +7,8 @@ reached = True
 solve_path = []
 step = 0
 path_step = 0
+dest_selected=False
+dest_block=[0,0]
 
 wall_open = [48, 49, 50, 51, 52, 53, 54]
 all_cells_open_path = []
@@ -26,8 +28,9 @@ def setup():
 
 def draw():
     global img, reached, step, path_step, solve_path
-    background(255)
+    # background(255)
     image(img, 0, 0)
+    dest_block_draw()
     if not reached:
         if solve_path[path_step] == 'r':
             snake.append(
@@ -48,13 +51,24 @@ def draw():
             step = 0
         if path_step == len(solve_path):
             reached = True
+            dest_selected=False
     draw_snake()
 
+def dest_block_draw():
+    global dest_selected,dest_block
+    if dest_selected:
+        rectMode(CENTER)
+        stroke(255)
+        fill(255,50,200)
+        rect(dest_block[1], dest_block[0], 20, 20)
+
 def mousePressed():
-    global path_step, step, w, reached, snake_start_cell, snake_dest_cell, solve_path, open_set, closed_set
-    if reached and (mouseY // w)!=snake_dest_cell[0] and (mouseX // w) != snake_dest_cell[1]:
+    global path_step, step, w, reached, snake_start_cell, snake_dest_cell, solve_path, open_set, closed_set,dest_block,dest_selected
+    if reached and ((mouseY // w)!=snake_dest_cell[0] or (mouseX // w) != snake_dest_cell[1]):
         snake_start_cell = [snake_dest_cell[0], snake_dest_cell[1]]
         snake_dest_cell = [mouseY // w, mouseX // w]
+        dest_block[0]=(snake_dest_cell[0]*w)+(w/2)
+        dest_block[1]=(snake_dest_cell[1]*w)+(w/2)
         solve_path = []
         open_set = {}
         closed_set = {}
@@ -62,12 +76,15 @@ def mousePressed():
         step = 0
         path_step = 0
         reached = False
+        dest_selected=True
 
 
 def draw_snake():
     global snake
     for s in snake:
         rectMode(CENTER)
+        stroke(255,0,0)
+        fill(0,255,255)
         rect(s[0], s[1], 10, 10)
 
 
