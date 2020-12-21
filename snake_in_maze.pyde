@@ -52,7 +52,7 @@ def draw():
 
 def mousePressed():
     global path_step, step, w, reached, snake_start_cell, snake_dest_cell, solve_path, open_set, closed_set
-    if reached:
+    if reached and (mouseY // w)!=snake_dest_cell[0] and (mouseX // w) != snake_dest_cell[1]:
         snake_start_cell = [snake_dest_cell[0], snake_dest_cell[1]]
         snake_dest_cell = [mouseY // w, mouseX // w]
         solve_path = []
